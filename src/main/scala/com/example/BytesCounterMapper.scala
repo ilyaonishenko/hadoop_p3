@@ -9,7 +9,6 @@ import scala.util.Try
 case class Pair(ip: String, bytes: Option[Int])
 
 class BytesCounterMapper extends Mapper[LongWritable, Text, Text, IntWritable]{
-  val one = new IntWritable(1)
 
   override def map(key: LongWritable, value: Text, context: Mapper[LongWritable, Text, Text, IntWritable]#Context): Unit = {
     val pair: Pair = parseLine(value.toString)
