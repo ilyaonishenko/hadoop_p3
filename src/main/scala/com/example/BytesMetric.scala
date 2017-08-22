@@ -19,5 +19,4 @@ case class BytesMetric(average: FloatWritable, sum: IntWritable) extends Writabl
   }
 
   override def toString: String = s"${average.toString}, ${sum.toString}"
-
 }

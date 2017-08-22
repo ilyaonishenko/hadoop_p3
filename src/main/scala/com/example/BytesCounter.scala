@@ -3,10 +3,10 @@ package com.example
 
 import org.apache.hadoop.conf.{Configuration, Configured}
 import org.apache.hadoop.fs.Path
-import org.apache.hadoop.io.{IntWritable, LongWritable, Text}
+import org.apache.hadoop.io.{IntWritable, LongWritable, SequenceFile, Text}
 import org.apache.hadoop.mapreduce.Job
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
+import org.apache.hadoop.mapreduce.lib.output.{FileOutputFormat, SequenceFileOutputFormat}
 import org.apache.hadoop.util.{Tool, ToolRunner}
 
 object BytesCounter extends Configured with Tool{
@@ -26,6 +26,9 @@ object BytesCounter extends Configured with Tool{
       return 2
     }
 
+    conf.setBoolean("mapreduce.output.fileoutputformat.compress", true)
+    conf.set("mapreduce.output.fileoutputformat.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec")
+
     val job = Job.getInstance(conf)
     job.setJarByClass(getClass)
     job.setJobName("ByteCount")
@@ -44,6 +47,9 @@ object BytesCounter extends Configured with Tool{
 
     job.setOutputKeyClass(classOf[Text])
     job.setOutputValueClass(classOf[BytesMetric])
+
+    SequenceFileOutputFormat.setOutputCompressionType(job, SequenceFile.CompressionType.BLOCK)
+
 
     job.waitForCompletion(true).compareTo(true)
   }
