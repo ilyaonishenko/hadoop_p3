@@ -5,7 +5,6 @@ import org.apache.hadoop.mapreduce.Mapper
 
 import scala.util.Try
 
-
 case class Pair(ip: String, bytes: Option[Int])
 
 class BytesCounterMapper extends Mapper[LongWritable, Text, Text, IntWritable]{

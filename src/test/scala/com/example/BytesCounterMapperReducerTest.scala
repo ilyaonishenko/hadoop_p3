@@ -1,6 +1,6 @@
 package com.example
 
-import org.apache.hadoop.io.{IntWritable, LongWritable, Text}
+import org.apache.hadoop.io.{FloatWritable, IntWritable, LongWritable, Text}
 import org.apache.hadoop.mrunit.mapreduce.{MapDriver, MapReduceDriver, ReduceDriver}
 import org.junit.Test
 import org.scalatest.junit.JUnitSuite
@@ -22,7 +22,7 @@ class BytesCounterMapperReducerTest extends JUnitSuite {
     val pairs = new IntWritable(10) :: new IntWritable(30) :: new IntWritable(20) :: Nil
     val reduceDriver = ReduceDriver.newReduceDriver(reducer)
     reduceDriver.withInput(new Text("ip42"), pairs.asJava)
-    reduceDriver.withOutput(new Text("ip42"), new Text("20.0, 60"))
+    reduceDriver.withOutput(new Text("ip42"), BytesMetric(new FloatWritable(20F), new IntWritable(60)))
     reduceDriver.runTest()
   }
 
@@ -31,7 +31,7 @@ class BytesCounterMapperReducerTest extends JUnitSuite {
     val reducer = new BytesCounterReducer
     val mapReduceDriver = MapReduceDriver.newMapReduceDriver(mapper, reducer)
     mapReduceDriver.withInput(new LongWritable(), new Text("ip1 - - [24/Apr/2011:04:18:54 -0400] \"GET /~strabal/grease/photo1/T97-4.jpg HTTP/1.1\" 200 6244 \"-\" \"Mozilla/5.0 (compatible; YandexImages/3.0; +http://yandex.com/bots)\""))
-    mapReduceDriver.withOutput(new Text("ip1"), new Text("6244.0, 6244"))
+    mapReduceDriver.withOutput(new Text("ip1"), BytesMetric(new FloatWritable(6244F), new IntWritable(6244)))
     mapReduceDriver.runTest()
   }
 }

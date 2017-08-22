@@ -43,7 +43,7 @@ object BytesCounter extends Configured with Tool{
     job.setMapOutputValueClass(classOf[IntWritable])
 
     job.setOutputKeyClass(classOf[Text])
-    job.setOutputValueClass(classOf[Text])
+    job.setOutputValueClass(classOf[BytesMetric])
 
     job.waitForCompletion(true).compareTo(true)
   }
